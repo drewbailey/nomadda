@@ -35,7 +35,8 @@ func NewLogo() *Logo {
 		Flex: tview.NewFlex(),
 	}
 
-	logo.SetBackgroundColor(tcell.ColorRed)
+	logo.SetBackgroundColor(tcell.ColorDefault)
+	logo.logo.SetBackgroundColor(tcell.ColorDefault)
 	logo.SetDirection(tview.FlexRow)
 	logo.AddItem(logo.logo, 120, 1, false)
 	logo.refresh()
@@ -45,7 +46,7 @@ func NewLogo() *Logo {
 func (l *Logo) refresh() {
 	l.logo.Clear()
 	for i, s := range nomadLogo {
-		fmt.Fprintf(l.logo, "[%s::b]%s", "green", s)
+		fmt.Fprintf(l.logo, "[%s::b]%s", "slategrey", s)
 		if i+1 < len(nomadLogo) {
 			fmt.Fprintf(l.logo, "\n")
 		}

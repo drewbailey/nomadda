@@ -41,8 +41,8 @@ func (a *App) header() tview.Primitive {
 	return header
 }
 
-func (a *App) Logo() tview.Primitive {
-	return a.views["logo"]
+func (a *App) Logo() *Logo {
+	return a.views["logo"].(*Logo)
 }
 
 type Pages struct {
