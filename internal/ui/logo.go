@@ -3,8 +3,8 @@ package ui
 import (
 	"fmt"
 
+	"github.com/derailed/tview"
 	"github.com/gdamore/tcell"
-	"github.com/rivo/tview"
 )
 
 var nomadLogo = []string{

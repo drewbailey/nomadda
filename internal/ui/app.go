@@ -1,8 +1,8 @@
 package ui
 
 import (
+	"github.com/derailed/tview"
 	"github.com/gdamore/tcell"
-	"github.com/rivo/tview"
 )
 
 type App struct {
@@ -27,30 +27,16 @@ func NewApp() *App {
 	return app
 }
 
-func (a *App) Init() {
-	a.Main.SetBackgroundColor(tcell.ColorDefault)
-	a.Main.AddPage("header", a.header(), true, true)
-	a.SetRoot(a.Main, true)
+func (a *App) Views() map[string]tview.Primitive {
+	return a.views
 }
 
-func (a *App) header() tview.Primitive {
-	header := tview.NewFlex()
-	header.SetDirection(tview.FlexColumn)
-	header.SetBackgroundColor(tcell.ColorDefault)
-	header.AddItem(a.Logo(), 120, 1, false)
-	return header
+func (a *App) Init() {
+	a.Main.SetBackgroundColor(tcell.ColorDefault)
+	// a.Main.AddPage("header", a.header(), true, true)
+	a.SetRoot(a.Main, true)
 }
 
 func (a *App) Logo() *Logo {
 	return a.views["logo"].(*Logo)
-}
-
-type Pages struct {
-	*tview.Pages
-}
-
-func NewPages() *Pages {
-	return &Pages{
-		Pages: tview.NewPages(),
-	}
 }

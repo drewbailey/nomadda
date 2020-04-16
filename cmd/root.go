@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hashicorp/nomadda/internal/ui"
+	"github.com/hashicorp/nomadda/internal/view"
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -78,7 +78,7 @@ func initConfig() {
 }
 
 func run(cmd *cobra.Command, args []string) {
-	app := ui.NewApp()
+	app := view.NewApp()
 	app.Init()
 	if err := app.Run(); err != nil {
 		panic(err)
