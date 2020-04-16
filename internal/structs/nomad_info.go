@@ -12,9 +12,9 @@ type Servers []string
 type Clients []string
 
 func (s Servers) GoString() string {
-	return strings.Join(s, ",")
+	return strings.Join(s, ", ")
 }
 
 func (c Clients) GoString() string {
-	return strings.Join(c, ",")
+	return strings.Join(c, ", ")
 }

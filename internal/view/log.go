@@ -29,6 +29,7 @@ func NewLog(app *App) *Log {
 
 func (l *Log) Init() {
 	l.SetBorder(true)
+	l.SetBorderColor(tcell.ColorLightSlateGray)
 	l.SetBackgroundColor(tcell.ColorDefault)
 	l.SetDirection(tview.FlexRow)
 
@@ -38,7 +39,7 @@ func (l *Log) Init() {
 	l.logs.SetText(initialLogMsg)
 	l.logs.SetWrap(true)
 
-	l.writer = tview.ANSIWriter(l.logs, "white", "black")
+	// l.writer = tview.ANSIWriter(l.logs, "white", "black")
 	l.AddItem(l.logs, 0, 10, true)
 }
 

@@ -8,7 +8,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/nomad/api"
 	"github.com/hashicorp/nomadda/internal/structs"
 )
@@ -69,12 +68,11 @@ func (c *Client) NomadInfo() (structs.NomadInfo, error) {
 	}, nil
 }
 
-func (c *Client) Logs() (io.ReadCloser, error) {
+func (c *Client) Logs(job, task string) (io.ReadCloser, error) {
 	cancel := make(chan struct{})
 
 	allocList, _, err := c.nomadClient.Allocations().List(&api.QueryOptions{})
 	if err != nil {
-		spew.Dump(len(allocList))
 		return nil, err
 	}
 
@@ -88,9 +86,7 @@ func (c *Client) Logs() (io.ReadCloser, error) {
 		allocs = append(allocs, alloc)
 	}
 
-	tasks := allocs[0].GetTaskGroup().Tasks
-
-	frames, errCh := c.nomadClient.AllocFS().Logs(allocs[0], true, tasks[0].Name, "stdout", api.OriginEnd, 0, cancel, &api.QueryOptions{})
+	frames, errCh := c.nomadClient.AllocFS().Logs(allocs[0], true, task, "stdout", api.OriginEnd, 0, cancel, &api.QueryOptions{})
 	select {
 	case err := <-errCh:
 		return nil, err

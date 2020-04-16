@@ -24,7 +24,8 @@ func (d *Details) Init() {
 	d.SetScrollable(true).SetWrap(true).SetRegions(true)
 	d.SetDynamicColors(true)
 	d.SetHighlightColor(tcell.ColorOrange)
-	d.SetTitleColor(tcell.ColorGreenYellow)
+	d.SetTitleColor(tcell.ColorLightGray)
+	d.SetTitle("🔎 Nomad Logs 🔎")
 	d.SetBorderPadding(0, 0, 1, 1)
 	d.SetChangedFunc(func() {
 		d.app.Draw()

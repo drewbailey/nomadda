@@ -1,10 +1,11 @@
 package view
 
 import (
+	"fmt"
 	"io"
+	"math/rand"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/derailed/tview"
 	"github.com/hashicorp/nomadda/internal/nomad"
 	"github.com/hashicorp/nomadda/internal/ui"
@@ -52,7 +53,9 @@ func (a *App) Init() error {
 
 	// start polling for changes
 	go a.Watch()
-	go a.Logs()
+	go a.Logs("docs", "server1")
+	go a.Logs("docs", "server2")
+	// go a.Logs("docs", "server2")
 
 	return nil
 }
@@ -81,22 +84,61 @@ func (a *App) Watch() {
 		case <-ticker.C:
 			info, err := a.client.NomadInfo()
 			if err != nil {
-				spew.Dump(err)
+				panic(err)
 			}
 			a.nomadInfo().InfoUpdated(info)
 		}
 	}
 }
 
-func (a *App) Logs() {
-	reader, err := a.client.Logs()
+func (a *App) Logs(job, task string) {
+	reader, err := a.client.Logs(job, task)
 	if err != nil {
 		panic(err)
 	}
 
+	lw := &LogWriter{
+		app:    a,
+		name:   task,
+		writer: tview.ANSIWriter(a.logs().logs, "#d8dee9", "#2e3440"),
+		color:  colorFor(task),
+	}
+
 	defer reader.Close()
-	_, err = io.Copy(a.logs(), reader)
+	_, err = io.Copy(lw, reader)
 	if err != nil {
 		panic(err)
 	}
+}
+
+type LogWriter struct {
+	app    *App
+	name   string
+	color  int
+	writer io.Writer
+}
+
+func (lw *LogWriter) Write(p []byte) (n int, err error) {
+	lw.app.QueueUpdateDraw(func() {
+		fmt.Fprint(lw.writer, lw.format(p))
+	})
+	return len(p), nil
+}
+
+const colorFmt = "\033[38;5;%dm%s\033[0m"
+const colourFmt = "\033[38;5%dm%s\033[0m"
+
+func colorize(s string, c int) string {
+	// def := tcell.ColorDefault()
+	return fmt.Sprintf(colorFmt, c, s)
+}
+
+func (lw *LogWriter) format(p []byte) string {
+	service := colorize(lw.name, lw.color)
+	return fmt.Sprintf("%s: %s", service, string(p))
+	// return colorize(string(p), lw.color)
+}
+
+func colorFor(n string) int {
+	return rand.Intn(250)
 }
