@@ -27,10 +27,6 @@ func (d *Details) Init() {
 	d.SetTitleColor(tcell.ColorLightGray)
 	d.SetTitle("🔎 Nomad Logs 🔎")
 	d.SetBorderPadding(0, 0, 1, 1)
-	d.SetChangedFunc(func() {
-		d.app.Draw()
-	})
-
 	// TODO handle keyboard capture
 	// d.SetInputCapture()
 

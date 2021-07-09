@@ -1,7 +1,6 @@
 package view
 
 import (
-	"fmt"
 	"io"
 
 	"github.com/derailed/tview"
@@ -41,12 +40,4 @@ func (l *Log) Init() {
 
 	// l.writer = tview.ANSIWriter(l.logs, "white", "black")
 	l.AddItem(l.logs, 0, 10, true)
-}
-
-func (l *Log) Write(p []byte) (n int, err error) {
-	l.app.QueueUpdateDraw(func() {
-		fmt.Fprint(l.writer, string(p))
-		l.logs.ScrollToEnd()
-	})
-	return len(p), nil
 }
